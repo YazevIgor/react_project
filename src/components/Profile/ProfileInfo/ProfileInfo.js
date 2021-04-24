@@ -1,17 +1,28 @@
 import React from "react";
-import classes from './Profile.module.css'
-import MyPosts from "./MyPosts/MyPosts";
+class ProfileInfo extends React.Component {
 
-const Profile = () => {
-    return <div className={classes.content}>
-        <div>
-            <img src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300" alt=""/>
+    state = {
+        editMode: true,
+        status: ''
+    }
+    toggleStatus = (check) => {
+        this.setState({editMode: !this.state.editMode})
+        if (check)
+        this.props.setMyStatus(this.state.status);
+    }
+    onStatusChange = (e) => {
+        this.setState({status: e.currentTarget.value})
+    }
+    render() {
+
+        return <div>
+            {this.state.editMode
+                ? <div onDoubleClick={() => this.toggleStatus(false)} ><span>{this.props.status || '-----'}</span></div>
+                : <div ><input onChange={this.onStatusChange} autoFocus={true} onBlur={() => this.toggleStatus(true)} value={this.state.status} /> </div>
+            }
         </div>
-        <div>
-            ava + description
-        </div>
-        <MyPosts />
-    </div>
+
+    }
 }
 
-export default Profile
+export default ProfileInfo

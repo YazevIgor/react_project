@@ -1,63 +1,41 @@
 import React from "react";
-import * as axios from 'axios'
 import userPhoto from '../assets/images/person-male.png'
 import styles from './Users.module.css'
+import {NavLink} from "react-router-dom";
 
-class UsersContainer extends React.Component {
 
-    componentDidMount() {
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.sizePage}`).then(response => {
-            this.props.addUser(response.data.items);
-            this.props.updateTotalCountPages(response.data.totalCount);
 
-        });
+let Users = (props) => {
+    let pages = [];
+    const totalPages = Math.ceil(props.totalCountPages / props.sizePage);
+    for (let i = 1; i <= totalPages; i++) {
+        pages.push(i)
     }
-
-    onClickPage(p) {
-        this.props.updateCurrentPage(p)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${p}&count=${this.props.sizePage}`).then(response => {
-            this.props.addUser(response.data.items);
-            this.props.updateTotalCountPages(response.data.totalCount);
-        })
-    }
-
-
-
-    render() {
-        let pages = [];
-        const totalPages = (this.props.totalCountPages / this.props.sizePage);
-
-        for (let i = 1; i <= totalPages; i++) {
-            pages.push(i)
-        }
-        return <div>
+    return (
+        <div>
             <div>
-                {pages.slice(0, 10).map((p) => {
-                    return <span onClick={() => this.onClickPage(p)}
-                                 className={this.props.currentPage === p && styles.currentPages}>{p}</span>
+                {pages.slice(0, 15).map((page) => {
+
+                    return <span onClick={() => props.onClickPage(page)}
+                                 className={props.currentPage === page && styles.currentPages}>{page}</span>
                 })}
             </div>
 
-            {this.props.users.map(u =>
+            {props.users.map(u =>
                 <div key={u.id}>
-                    <img src={u.photos.small != null ? u.photos : userPhoto} className={styles} width={100}
-                         height={100}/>
+                    <NavLink  to={"/profile/" + u.id}>
+                        <img src={u.photos.small != null ? u.photos.small : userPhoto} className={styles} width={100}
+                             height={100}/>
+                    </NavLink>
                     <div>
                         {u.followed
-                            ? <button onClick={() => {
-                                this.props.followToggle(u.id)
-                            }}>Followed</button>
-                            : <button onClick={() => {
-                                this.props.followToggle(u.id)
-                            }}>UnFollowed</button>}
+                            ? <button disabled={ props.loadFollowing.some(id => id === u.id)} onClick={() => {props.onClickUnSubscribe(u.id)}}>UnFollowed</button>
+                            : <button disabled={ props.loadFollowing.some(id => id === u.id)} onClick={() => {props.onClickSubscribe(u.id)}}>Followed</button>}
                     </div>
                     <div>{u.name}</div>
                     <div>{u.id}</div>
 
                 </div>)}
-        </div>
-    }
-
+        </div>)
 }
-
-export default UsersContainer;
+export default Users

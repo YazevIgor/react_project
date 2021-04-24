@@ -1,5 +1,5 @@
 import React from "react";
-import {AddDataPostTextCreateAction, AddPostCreateAction} from "../../../redux/profile-reducer";
+import {addDataPostTextCreateAction,addPostCreateAction,} from "../../../redux/profile-reducer";
 import MyPosts from "./MyPosts";
 import {connect} from "react-redux";
 
@@ -7,13 +7,13 @@ import {connect} from "react-redux";
 const mapStateToProps = (state) => {
     return {
         postsData: state.profilePage.postsData,
-        textData: state.profilePage.textData
+        textData: state.profilePage.postText
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        AddPostCreateAction: () => dispatch(AddPostCreateAction()),
-        AddDataPostTextCreateAction: (text) => dispatch(AddDataPostTextCreateAction(text))
+        addPostCreateAction: () => dispatch(addPostCreateAction()),
+        addDataPostTextCreateAction: (text) => dispatch(addDataPostTextCreateAction(text))
     }
 }
 
