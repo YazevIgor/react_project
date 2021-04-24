@@ -11,6 +11,8 @@ const App = () => {
             <Nav />
             <Profile />
 
+        <div className="App">
+           simple html
         </div>
     );
 }
